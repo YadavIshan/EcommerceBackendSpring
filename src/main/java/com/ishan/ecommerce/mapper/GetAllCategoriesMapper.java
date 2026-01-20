@@ -14,8 +14,10 @@ public class GetAllCategoriesMapper {
 		}
 
 		List<CategoryDTO> categoryDTOS = new ArrayList<>();
+		Long id = 0L;
 		for (String category : categories) {
 			CategoryDTO categoryDTO = CategoryDTO.builder()
+					.id(id++)
 					.name(category)
 					.build();
 			categoryDTOS.add(categoryDTO);

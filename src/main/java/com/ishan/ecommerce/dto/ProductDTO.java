@@ -1,6 +1,5 @@
 package com.ishan.ecommerce.dto;
 
-
 import lombok.*;
 
 @Getter
@@ -8,10 +7,10 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDTO{
+public class ProductDTO {
 	private String image;
 	private String color;
-	private int price;
+	private double price;
 	private String description;
 	private int discount;
 	private String model;

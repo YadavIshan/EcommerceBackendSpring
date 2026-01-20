@@ -35,9 +35,28 @@ public interface FakeStoreCategoryApi {
 
 ### 2. The Config (`RetrofitConfig.java`)
 Connects the pieces.
-- **`Retrofit.Builder`**: Sets the common `baseUrl` ("https://fakestoreapi.com/").
+- **`@Value("${BASE_URL}")`**: Injects the URL from `application.properties` (loaded from `.env`).
+- **`Retrofit.Builder`**: Sets the `baseUrl` dynamically.
 - **`GsonConverterFactory`**: Handles JSON <-> Java Object conversion automatically.
 - **`@Bean`**: Creates the actual instance of `FakeStoreCategoryApi` so you can `@Autowired` it.
+
+```java
+@Configuration
+public class RetrofitConfig {
+
+    @Value("${BASE_URL}")
+    private String BASE_URL;
+
+    @Bean
+    public Retrofit retrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(BASE_URL) // Injected from env
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+    // ...
+}
+```
 
 ### 3. The Usage (`FakeStoreCategoryGateway.java`)
 ```java
