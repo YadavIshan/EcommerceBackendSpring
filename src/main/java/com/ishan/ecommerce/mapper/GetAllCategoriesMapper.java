@@ -2,9 +2,9 @@ package com.ishan.ecommerce.mapper;
 
 import com.ishan.ecommerce.dto.CategoryDTO;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class GetAllCategoriesMapper {
 
@@ -13,15 +13,10 @@ public class GetAllCategoriesMapper {
 			return Collections.emptyList();
 		}
 
-		List<CategoryDTO> categoryDTOS = new ArrayList<>();
-		Long id = 0L;
-		for (String category : categories) {
-			CategoryDTO categoryDTO = CategoryDTO.builder()
-					.id(id++)
-					.name(category)
-					.build();
-			categoryDTOS.add(categoryDTO);
-		}
+		AtomicLong id = new AtomicLong(0L);
+		List<CategoryDTO> categoryDTOS = categories.stream()
+				.map(category -> CategoryDTO.builder().id(id.getAndIncrement()).name(category).build())
+				.toList();
 		return categoryDTOS;
 	}
 

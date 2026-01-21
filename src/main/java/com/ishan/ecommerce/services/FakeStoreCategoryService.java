@@ -1,7 +1,5 @@
 package com.ishan.ecommerce.services;
 
-
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +13,10 @@ import java.util.List;
 @Service
 public class FakeStoreCategoryService implements ICategoryService {
 
-
     private final ICategoryGateway categoryGateway;
 
     public FakeStoreCategoryService(
-            @Qualifier("fakeStoreRestTemplateGateway") ICategoryGateway categoryGateway) {
+            @Qualifier("fakeStoreCategoryRestTemplateGateway") ICategoryGateway categoryGateway) {
         this.categoryGateway = categoryGateway;
     }
 
@@ -29,19 +26,19 @@ public class FakeStoreCategoryService implements ICategoryService {
     }
 
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
-        //Not Implemented
+        // Not Implemented
         return null;
     }
-    public CategoryDTO getByName(String name) throws Exception{
-        //Not Implemented
+
+    public CategoryDTO getByName(String name) throws Exception {
+        // Not Implemented
         return null;
     }
 
     @Override
     public AllProductsOfCategoryDTO getAllProductsOfCategory(Long categoryId) {
-        //Not Implemented
+        // Not Implemented
         return null;
     }
-
 
 }
