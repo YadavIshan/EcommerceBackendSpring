@@ -23,6 +23,9 @@ public class FakeStoreCategoryRestTemplateGateway implements ICategoryGateway {
     @Value("${fakeStore.category.url}")
     private String fakeStoreCategoryUrl;
 
+    @Value("${fakeStore.productsByCategory.url}")
+    private String fakeStoreProductsByCategoryUrl;
+
     public FakeStoreCategoryRestTemplateGateway(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplateBuilder = restTemplateBuilder;
     }
@@ -37,6 +40,19 @@ public class FakeStoreCategoryRestTemplateGateway implements ICategoryGateway {
         }
 
         return GetAllCategoriesMapper.toCategoryDto(Arrays.asList(responseEntity.getBody()));
+    }
 
+    @Override
+    public List<com.ishan.ecommerce.dto.FakeStoreProductDTO> getProductsByCategory(String categoryName) {
+        RestTemplate restTemplate = this.restTemplateBuilder.build();
+        String url = fakeStoreProductsByCategoryUrl + "/" + categoryName;
+        ResponseEntity<com.ishan.ecommerce.dto.FakeStoreProductDTO[]> responseEntity = restTemplate.getForEntity(url,
+                com.ishan.ecommerce.dto.FakeStoreProductDTO[].class);
+
+        if (responseEntity.getBody() == null) {
+            return List.of();
+        }
+
+        return Arrays.asList(responseEntity.getBody());
     }
 }

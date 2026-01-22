@@ -19,12 +19,22 @@ public class FakeStoreProductService implements IProductService {
 
     @Override
     public FakeStoreProductResponseDTO getProductById(Long id) throws Exception {
-        return null;
+        ProductDTO product = this.productGateway.getProductById(id);
+        if (product == null) {
+            throw new Exception("Product not found");
+        }
+
+        // Wrap in ResponseDTO
+        return FakeStoreProductResponseDTO.builder()
+                .product(product)
+                .message("Success")
+                .status("200")
+                .build();
     }
 
     @Override
     public ProductDTO createProduct(ProductDTO productDTO) {
-        return null;
+        return this.productGateway.createProduct(productDTO);
     }
 
     @Override

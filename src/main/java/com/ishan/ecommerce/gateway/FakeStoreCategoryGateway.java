@@ -39,4 +39,18 @@ public class FakeStoreCategoryGateway implements ICategoryGateway {
         // 3. Map the response to a list of CategoryDTO objects
         return GetAllCategoriesMapper.toCategoryDto(responseBody);
     }
+
+    @Override
+    public List<com.ishan.ecommerce.dto.FakeStoreProductDTO> getProductsByCategory(String categoryName) {
+        try {
+            retrofit2.Response<java.util.List<com.ishan.ecommerce.dto.FakeStoreProductDTO>> response = this.fakeStoreCategoryApi
+                    .getProductsByCategory(categoryName).execute();
+            if (!response.isSuccessful()) {
+                throw new IOException("Failed to fetch products for category. Status: " + response.code());
+            }
+            return response.body();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to fetch products", e);
+        }
+    }
 }

@@ -45,6 +45,7 @@ public class ProductController {
     // Usage: POST /api/products (with JSON body matching ProductDTO)
     @PostMapping("")
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) {
-        return ResponseEntity.ok(productDTO);
+        ProductDTO created = productService.createProduct(productDTO);
+        return ResponseEntity.ok(created);
     }
 }

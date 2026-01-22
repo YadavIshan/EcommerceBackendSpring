@@ -58,16 +58,18 @@ To start the application:
 
 ## API Testing (Postman)
 
-The application runs on `http://localhost:8080` by default. Below are the available endpoints for testing via Postman.
+The application runs on the port defined in the `.env` file (default `3000`). Below are the available endpoints for testing via Postman.
+
+> **Note:** Most endpoints integrate directly with the external **FakeStore API** (`https://fakestoreapi.com/`). Data created via POST requests is handled by FakeStore API (which commonly returns the object but does not persist it permanently in their database). The "Create Category" endpoint is simulated locally.
 
 ### Categories
 *   **Get All Categories**
     *   **Method**: `GET`
-    *   **URL**: `http://localhost:8080/api/categories`
+    *   **URL**: `http://localhost:3000/api/categories`
     *   **Query Param** (Optional): `name` (e.g., `?name=electronics`) - Filter by name.
 *   **Create Category**
     *   **Method**: `POST`
-    *   **URL**: `http://localhost:8080/api/categories`
+    *   **URL**: `http://localhost:3000/api/categories`
     *   **Body**: JSON
         ```json
         {
@@ -76,19 +78,19 @@ The application runs on `http://localhost:8080` by default. Below are the availa
         ```
 *   **Get Products in Category**
     *   **Method**: `GET`
-    *   **URL**: `http://localhost:8080/api/categories/{id}/products`
+    *   **URL**: `http://localhost:3000/api/categories/{id}/products`
 
 ### Products
 *   **Get All Products**
     *   **Method**: `GET`
-    *   **URL**: `http://localhost:8080/api/products`
+    *   **URL**: `http://localhost:3000/api/products`
     *   **Query Param** (Optional): `limit` (Default: 10)
 *   **Get Product by ID**
     *   **Method**: `GET`
-    *   **URL**: `http://localhost:8080/api/products/{id}`
+    *   **URL**: `http://localhost:3000/api/products/{id}`
 *   **Create Product**
     *   **Method**: `POST`
-    *   **URL**: `http://localhost:8080/api/products`
+    *   **URL**: `http://localhost:3000/api/products`
     *   **Body**: JSON
         ```json
         {
