@@ -7,7 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @org.springframework.test.context.TestPropertySource(properties = {
 		"FAKESTORE_API_URL=https://fakestoreapi.com",
 		"BASE_URL=https://fakestoreapi.com",
-		"fakeStore.category.url=https://fakestoreapi.com/api/products/category"
+		"fakeStore.category.url=https://fakestoreapi.com/api/products/category",
+		"fakeStore.productsByCategory.url=https://fakestoreapi.com/products/category"
 })
 class EcommerceBackendApplicationTests {
 
