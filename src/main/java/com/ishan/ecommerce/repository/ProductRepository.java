@@ -7,5 +7,5 @@ import com.ishan.ecommerce.entity.ProductEntity;
 
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
-
+    java.util.List<ProductEntity> findByCategory_Id(Long categoryId);
 }

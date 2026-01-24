@@ -15,7 +15,8 @@ public class ProductMapper {
                 .title(productDTO.getTitle())
                 .price(productDTO.getPrice())
                 .description(productDTO.getDescription())
-                .category(productDTO.getCategoryId() != null ? String.valueOf(productDTO.getCategoryId()) : null)
+                // Category must be set by the service using categoryId
+                .category(null)
                 .image(productDTO.getImage())
                 .build();
     }
@@ -29,19 +30,11 @@ public class ProductMapper {
                 .title(productEntity.getTitle())
                 .price(productEntity.getPrice())
                 .description(productEntity.getDescription())
-                // Assuming category is stored as ID string for now
-                .categoryId(productEntity.getCategory() != null ? tryParseLong(productEntity.getCategory()) : null)
+                .categoryId(productEntity.getCategory() != null ? productEntity.getCategory().getId() : null)
                 .image(productEntity.getImage())
                 .createdAt(productEntity.getCreatedAt())
                 .updatedAt(productEntity.getUpdatedAt())
                 .build();
     }
 
-    private Long tryParseLong(String value) {
-        try {
-            return Long.parseLong(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
 }

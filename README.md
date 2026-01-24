@@ -1,18 +1,20 @@
 # Ecommerce Backend Spring
 
-A Spring Boot backend application for an e-commerce platform, demonstrating integration with external APIs (FakeStore) using Retrofit, Gateway pattern, and clean architecture principles.
+A Spring Boot backend application for an e-commerce platform. It demonstrates a transition from a Gateway pattern (using Retrofit for external FakeStore API) to a fully persisted, database-backed architecture using JPA and Hibernate.
 
 ## Package Structure
 
 The project is organized into the following packages under `com.ishan.ecommerce`:
 
-*   **`api`**: Contains Retrofit interfaces for defining external API endpoints (e.g., `FakeStoreProductApi`, `FakeStoreCategoryApi`).
-*   **`configuration`**: Spring configuration classes (e.g., `RetrofitConfig` for setting up Retrofit clients).
-*   **`controllers`**: REST Controllers that handle incoming HTTP requests (e.g., `ProductController`, `CategoryController`).
-*   **`dto`**: Data Transfer Objects used for type-safe data exchange between layers and API responses.
-*   **`gateway`**: Implementation of the Gateway pattern to abstract external API interactions (e.g., `FakeStoreProductGateway`).
-*   **`mapper`**: Utility classes for mapping between DTOs and internal models.
-*   **`services`**: Contains business logic interfaces and implementations (e.g., `FakeStoreProductService`).
+*   **`api`**: Contains Retrofit interfaces for defining external API endpoints.
+*   **`configuration`**: Spring configuration classes.
+*   **`controllers`**: REST Controllers that handle incoming HTTP requests (e.g., `AdminProductController`, `CategoryController`).
+*   **`dto`**: Data Transfer Objects used for type-safe data exchange.
+*   **`entity`**: JPA Entities representing database tables (e.g., `ProductEntity`, `CategoryEntity`).
+*   **`gateway`**: Implementation of the Gateway pattern to abstract external API interactions.
+*   **`mapper`**: Utility classes for mapping between DTOs and internal entities.
+*   **`repository`**: Spring Data JPA repositories for database access (`ProductRepository`, `CategoryRepository`).
+*   **`services`**: Contains business logic interfaces and implementations (e.g., `AdminProductService`, `CategoryService`).
 
 ## Configuration
 
@@ -21,25 +23,22 @@ The application requires an `.env` file in the project root to configure environ
 Create a file named `.env` and add the following variables:
 
 ```ini
-PORT=3000(Of your choice)
+PORT=3000
 FAKESTORE_API_URL=https://fakestoreapi.com/
 ```
 
 *   **`PORT`**: The port number on which the server will run.
-*   **`FAKESTORE_API_URL`**: The base URL for the external FakeStore API.
+*   **`FAKESTORE_API_URL`**: The base URL for the external FakeStore API (used by legacy components).
 
 ## Database
 
-The application is configured to use an **H2 In-Memory Database** by default, which is convenient for development and testing without needing a local database server.
+The application is configured to use an **H2 In-Memory Database** by default. Both **Products** and **Categories** are now fully persisted entities with a `@ManyToOne` relationship (Product -> Category).
 
 *   **Database URL**: `jdbc:h2:mem:testdb;NON_KEYWORDS=USER`
 *   **Driver Class**: `org.h2.Driver`
 *   **Username**: `sa`
 *   **Password**: (Empty)
 *   **Console**: Enabled
-*   **Bootstrap Mode**: Default
-*   **Defer Datasource Init**: False
-*   **Database Platform**: `org.hibernate.dialect.H2Dialect`
 
 ### Accessing H2 Console
 When the application is running, you can access the H2 console at:
@@ -57,103 +56,74 @@ When the application is running, you can access the H2 console at:
 This project uses Gradle for build and dependency management.
 
 ### Clean and Compile
-To clean the build directory and compile the Java source code:
 ```bash
 ./gradlew clean compileJava
 ```
 
 ### Run Tests
-To execute the unit and integration tests:
 ```bash
 ./gradlew test
 ```
 
 ### Build Project
-To build the executable JAR file:
 ```bash
 ./gradlew build
 ```
 
 ### Run Application
-To start the application:
 ```bash
 ./gradlew bootRun
 ```
 
 ## API Testing (Postman)
 
-The application runs on the port defined in the `.env` file (default `3000`). Below are the available endpoints for testing via Postman.
+The application runs on the port defined in the `.env` file (default `3000`).
 
-> **Note:** Most endpoints integrate directly with the external **FakeStore API** (`https://fakestoreapi.com/`). Data created via POST requests is handled by FakeStore API (which commonly returns the object but does not persist it permanently in their database). The "Create Category" endpoint is simulated locally.
-
-### Categories
+### Categories (Database Backed)
 *   **Get All Categories**
     *   **Method**: `GET`
     *   **URL**: `http://localhost:3000/api/categories`
-    *   **Query Param** (Optional): `name` (e.g., `?name=electronics`) - Filter by name.
 *   **Create Category**
     *   **Method**: `POST`
     *   **URL**: `http://localhost:3000/api/categories`
     *   **Body**: JSON
         ```json
         {
-            "name": "New Category"
+            "name": "Electronics"
         }
         ```
 *   **Get Products in Category**
     *   **Method**: `GET`
     *   **URL**: `http://localhost:3000/api/categories/{id}/products`
 
-### Products
-*   **Get All Products**
-    *   **Method**: `GET`
-    *   **URL**: `http://localhost:3000/api/products`
-    *   **Query Param** (Optional): `limit` (Default: 10)
-*   **Get Product by ID**
-    *   **Method**: `GET`
-    *   **URL**: `http://localhost:3000/api/products/{id}`
-*   **Create Product**
-    *   **Method**: `POST`
-    *   **URL**: `http://localhost:3000/api/products`
-    *   **Body**: JSON
-        ```json
-        {
-            "title": "Product Title",
-            "price": 99.99,
-            "description": "Description",
-            "image": "https://example.com/image.jpg",
-            "category": "electronics"
-        }
-        }
-        ```
-
-### Admin
+### Admin Products (Database Backed)
 *   **Create Product (Persistent)**
     *   **Method**: `POST`
     *   **URL**: `http://localhost:3000/api/admin/products`
     *   **Body**: JSON
         ```json
         {
-            "title": "Test Product",
-            "price": 29.99,
-            "description": "Testing repository",
-            "image": "https://i.pravatar.cc",
-            "categoryId": 123
+            "title": "Smartphone",
+            "price": 699.99,
+            "description": "High-end smartphone",
+            "image": "https://example.com/phone.jpg",
+            "categoryId": 1
         }
         ```
-*   **Get All Products (Persistent)**
+    *   **Note**: `categoryId` must correspond to an existing Category ID.
+*   **Get All Products**
     *   **Method**: `GET`
     *   **URL**: `http://localhost:3000/api/admin/products`
-*   **Get Product By ID (Persistent)**
+*   **Get Product By ID**
     *   **Method**: `GET`
     *   **URL**: `http://localhost:3000/api/admin/products/{id}`
-*   **Delete Product (Persistent)**
+*   **Delete Product**
     *   **Method**: `DELETE`
     *   **URL**: `http://localhost:3000/api/admin/products/{id}`
-*   **Update Pricing (Persistent)**
+*   **Update Pricing**
     *   **Method**: `PATCH`
     *   **URL**: `http://localhost:3000/api/admin/products/{id}`
     *   **Body**: Raw (Content-Type: `application/json`)
         ```text
-        999.99
+        599.99
         ```

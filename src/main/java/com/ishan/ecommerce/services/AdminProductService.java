@@ -10,17 +10,28 @@ import java.util.List;
 @Service
 public class AdminProductService implements IAdminProductService {
     private final ProductRepository productRepository;
+    private final com.ishan.ecommerce.repository.CategoryRepository categoryRepository;
     private final com.ishan.ecommerce.mapper.ProductMapper productMapper;
 
     public AdminProductService(ProductRepository productRepository,
+            com.ishan.ecommerce.repository.CategoryRepository categoryRepository,
             com.ishan.ecommerce.mapper.ProductMapper productMapper) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
         this.productMapper = productMapper;
     }
 
     @Override
     public ProductDTO createProduct(ProductDTO productDTO) {
         ProductEntity productEntity = productMapper.toEntity(productDTO);
+
+        if (productDTO.getCategoryId() != null) {
+            com.ishan.ecommerce.entity.CategoryEntity category = categoryRepository.findById(productDTO.getCategoryId())
+                    .orElseThrow(
+                            () -> new RuntimeException("Category not found with id: " + productDTO.getCategoryId()));
+            productEntity.setCategory(category);
+        }
+
         ProductEntity savedEntity = productRepository.save(productEntity);
         return productMapper.toDTO(savedEntity);
     }
