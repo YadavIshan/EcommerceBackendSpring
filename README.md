@@ -141,3 +141,19 @@ The application runs on the port defined in the `.env` file (default `3000`). Be
             "categoryId": 123
         }
         ```
+*   **Get All Products (Persistent)**
+    *   **Method**: `GET`
+    *   **URL**: `http://localhost:3000/api/admin/products`
+*   **Get Product By ID (Persistent)**
+    *   **Method**: `GET`
+    *   **URL**: `http://localhost:3000/api/admin/products/{id}`
+*   **Delete Product (Persistent)**
+    *   **Method**: `DELETE`
+    *   **URL**: `http://localhost:3000/api/admin/products/{id}`
+*   **Update Pricing (Persistent)**
+    *   **Method**: `PATCH`
+    *   **URL**: `http://localhost:3000/api/admin/products/{id}`
+    *   **Body**: Raw (Content-Type: `application/json`)
+        ```text
+        999.99
+        ```
