@@ -79,51 +79,85 @@ This project uses Gradle for build and dependency management.
 
 The application runs on the port defined in the `.env` file (default `3000`).
 
-### Categories (Database Backed)
+### 1. Public APIs (FakeStore Integration)
+These endpoints interact with the external **FakeStore API**. They are intended for public browsing and demonstration.
+> **Note:** Data created via these POST requests is simulated by FakeStore API and is **not persisted** in your local database.
+
+#### Products (Public)
+*   **Get All Products**
+    *   `GET http://localhost:3000/api/products?limit=10`
+*   **Get Product by ID**
+    *   `GET http://localhost:3000/api/products/{id}`
+*   **Create Product (Simulation)**
+    *   `POST http://localhost:3000/api/products`
+    *   **Body** (JSON):
+        ```json
+        {
+            "title": "Public Product",
+            "price": 13.5,
+            "description": "lorem ipsum set",
+            "image": "https://i.pravatar.cc",
+            "category": "electronic"
+        }
+        ```
+
+#### Categories (Public)
 *   **Get All Categories**
-    *   **Method**: `GET`
-    *   **URL**: `http://localhost:3000/api/categories`
+    *   `GET http://localhost:3000/api/categories`
+    *   **Query Param**: `?name=jewelery` (Filter by name)
+*   **Create Category (Simulation)**
+    *   `POST http://localhost:3000/api/categories`
+    *   **Body** (JSON):
+        ```json
+        {
+            "name": "New Collection"
+        }
+        ```
+*   **Get Products in Category**
+    *   `GET http://localhost:3000/api/categories/{id}/products`
+
+---
+
+### 2. Admin APIs (Internal Database)
+These endpoints interact with your **local H2 database**. Data created here is **fully persisted** deeply in your application.
+
+#### Admin Products (Database)
+*   **Create Product**
+    *   `POST http://localhost:3000/api/admin/products`
+    *   **Body** (JSON):
+        ```json
+        {
+            "title": "Database Stored Phone",
+            "price": 699.99,
+            "description": "This is stored in H2 DB",
+            "image": "https://example.com/phone.jpg",
+            "categoryId": 1
+        }
+        ```
+    *   *Requirement: `categoryId` must exist in the database.*
+*   **Get All Products**
+    *   `GET http://localhost:3000/api/admin/products`
+*   **Get Product By ID**
+    *   `GET http://localhost:3000/api/admin/products/{id}`
+*   **Delete Product**
+    *   `DELETE http://localhost:3000/api/admin/products/{id}`
+*   **Update Product Price**
+    *   `PATCH http://localhost:3000/api/admin/products/{id}`
+    *   **Body** (Raw Text/JSON):
+        ```text
+        599.99
+        ```
+
+#### Admin Categories (Database)
 *   **Create Category**
-    *   **Method**: `POST`
-    *   **URL**: `http://localhost:3000/api/categories`
-    *   **Body**: JSON
+    *   `POST http://localhost:3000/api/admin/categories`
+    *   **Body** (JSON):
         ```json
         {
             "name": "Electronics"
         }
         ```
+*   **Get All Categories**
+    *   `GET http://localhost:3000/api/admin/categories`
 *   **Get Products in Category**
-    *   **Method**: `GET`
-    *   **URL**: `http://localhost:3000/api/categories/{id}/products`
-
-### Admin Products (Database Backed)
-*   **Create Product (Persistent)**
-    *   **Method**: `POST`
-    *   **URL**: `http://localhost:3000/api/admin/products`
-    *   **Body**: JSON
-        ```json
-        {
-            "title": "Smartphone",
-            "price": 699.99,
-            "description": "High-end smartphone",
-            "image": "https://example.com/phone.jpg",
-            "categoryId": 1
-        }
-        ```
-    *   **Note**: `categoryId` must correspond to an existing Category ID.
-*   **Get All Products**
-    *   **Method**: `GET`
-    *   **URL**: `http://localhost:3000/api/admin/products`
-*   **Get Product By ID**
-    *   **Method**: `GET`
-    *   **URL**: `http://localhost:3000/api/admin/products/{id}`
-*   **Delete Product**
-    *   **Method**: `DELETE`
-    *   **URL**: `http://localhost:3000/api/admin/products/{id}`
-*   **Update Pricing**
-    *   **Method**: `PATCH`
-    *   **URL**: `http://localhost:3000/api/admin/products/{id}`
-    *   **Body**: Raw (Content-Type: `application/json`)
-        ```text
-        599.99
-        ```
+    *   `GET http://localhost:3000/api/admin/categories/{id}/products`

@@ -9,15 +9,14 @@ import com.ishan.ecommerce.mapper.CategoryMapper;
 import com.ishan.ecommerce.mapper.ProductMapper;
 import com.ishan.ecommerce.repository.CategoryRepository;
 import com.ishan.ecommerce.repository.ProductRepository;
-import org.springframework.context.annotation.Primary;
+
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
 
 @Service
-@Primary
-public class CategoryService implements ICategoryService {
+public class CategoryService implements IAdminCategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
