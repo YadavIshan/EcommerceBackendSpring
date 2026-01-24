@@ -28,6 +28,30 @@ FAKESTORE_API_URL=https://fakestoreapi.com/
 *   **`PORT`**: The port number on which the server will run.
 *   **`FAKESTORE_API_URL`**: The base URL for the external FakeStore API.
 
+## Database
+
+The application is configured to use an **H2 In-Memory Database** by default, which is convenient for development and testing without needing a local database server.
+
+*   **Database URL**: `jdbc:h2:mem:testdb;NON_KEYWORDS=USER`
+*   **Driver Class**: `org.h2.Driver`
+*   **Username**: `sa`
+*   **Password**: (Empty)
+*   **Console**: Enabled
+*   **Bootstrap Mode**: Default
+*   **Defer Datasource Init**: False
+*   **Database Platform**: `org.hibernate.dialect.H2Dialect`
+
+### Accessing H2 Console
+When the application is running, you can access the H2 console at:
+`http://localhost:3000/h2-console`
+
+**Login Settings:**
+*   **JDBC URL**: `jdbc:h2:mem:testdb`
+*   **User Name**: `sa`
+*   **Password**: (Leave empty)
+
+> **Note:** Being an in-memory database, all data will be lost when the application is restarted.
+
 ## Build and Test
 
 This project uses Gradle for build and dependency management.
@@ -99,5 +123,21 @@ The application runs on the port defined in the `.env` file (default `3000`). Be
             "description": "Description",
             "image": "https://example.com/image.jpg",
             "category": "electronics"
+        }
+        }
+        ```
+
+### Admin
+*   **Create Product (Persistent)**
+    *   **Method**: `POST`
+    *   **URL**: `http://localhost:3000/api/admin/products`
+    *   **Body**: JSON
+        ```json
+        {
+            "title": "Test Product",
+            "price": 29.99,
+            "description": "Testing repository",
+            "image": "https://i.pravatar.cc",
+            "categoryId": 123
         }
         ```
