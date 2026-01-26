@@ -2,6 +2,7 @@ package com.ishan.ecommerce.services;
 
 import com.ishan.ecommerce.dto.FakeStoreProductResponseDTO;
 import com.ishan.ecommerce.dto.ProductDTO;
+import com.ishan.ecommerce.exception.ProductNotFoundException;
 
 import java.util.List;
 
@@ -18,10 +19,10 @@ public class FakeStoreProductService implements IProductService {
     }
 
     @Override
-    public FakeStoreProductResponseDTO getProductById(Long id) throws Exception {
+    public FakeStoreProductResponseDTO getProductById(Long id) {
         ProductDTO product = this.productGateway.getProductById(id);
         if (product == null) {
-            throw new Exception("Product not found");
+            throw new ProductNotFoundException("Product not found with id: " + id);
         }
 
         // Wrap in ResponseDTO

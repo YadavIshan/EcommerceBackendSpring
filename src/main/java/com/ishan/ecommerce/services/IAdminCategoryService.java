@@ -10,7 +10,7 @@ public interface IAdminCategoryService {
 
     CategoryDTO createCategory(CategoryDTO categoryDTO);
 
-    CategoryDTO getByName(String name) throws Exception;
+    CategoryDTO getByName(String name);
 
-    AllProductsOfCategoryDTO getAllProductsOfCategory(Long categoryId) throws Exception;
+    AllProductsOfCategoryDTO getAllProductsOfCategory(Long categoryId);
 }

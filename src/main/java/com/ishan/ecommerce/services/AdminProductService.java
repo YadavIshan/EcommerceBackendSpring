@@ -1,5 +1,8 @@
 package com.ishan.ecommerce.services;
 
+import com.ishan.ecommerce.exception.ProductNotFoundException;
+import com.ishan.ecommerce.exception.CategoryNotFoundException;
+
 import org.springframework.stereotype.Service;
 
 import com.ishan.ecommerce.dto.ProductDTO;
@@ -28,7 +31,8 @@ public class AdminProductService implements IAdminProductService {
         if (productDTO.getCategoryId() != null) {
             com.ishan.ecommerce.entity.CategoryEntity category = categoryRepository.findById(productDTO.getCategoryId())
                     .orElseThrow(
-                            () -> new RuntimeException("Category not found with id: " + productDTO.getCategoryId()));
+                            () -> new CategoryNotFoundException(
+                                    "Category not found with id: " + productDTO.getCategoryId()));
             productEntity.setCategory(category);
         }
 
@@ -39,7 +43,7 @@ public class AdminProductService implements IAdminProductService {
     @Override
     public ProductDTO updateProductPriceById(Long id, Double price) {
         ProductEntity productEntity = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
         productEntity.setPrice(price);
         ProductEntity updatedEntity = productRepository.save(productEntity);
         return productMapper.toDTO(updatedEntity);
@@ -48,7 +52,7 @@ public class AdminProductService implements IAdminProductService {
     @Override
     public ProductDTO findProductById(Long id) {
         ProductEntity productEntity = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
         return productMapper.toDTO(productEntity);
     }
 
@@ -61,6 +65,24 @@ public class AdminProductService implements IAdminProductService {
     public List<ProductDTO> findAllProducts() {
         List<ProductEntity> productEntities = productRepository.findAll();
         return productEntities.stream()
+                .map(productMapper::toDTO)
+                .toList();
+    }
+
+    @Override
+    public ProductDTO getMostExpensiveProductByCategory(Long categoryId) {
+        List<ProductEntity> products = productRepository.findMostExpensiveProducts(categoryId);
+        if (products.isEmpty()) {
+            throw new ProductNotFoundException("No products found for category id: " + categoryId);
+        }
+        // Since it's ordered by price DESC, the first one is the most expensive
+        return productMapper.toDTO(products.get(0));
+    }
+
+    @Override
+    public List<ProductDTO> findProductsByMinPrice(Double minPrice) {
+        List<ProductEntity> products = productRepository.filterProductsByMinPrice(minPrice);
+        return products.stream()
                 .map(productMapper::toDTO)
                 .toList();
     }

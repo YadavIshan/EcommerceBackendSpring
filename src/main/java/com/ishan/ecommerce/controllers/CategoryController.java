@@ -29,11 +29,11 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllCategories(@RequestParam(required = false) String name) throws Exception {
-        if(name != null && !name.isBlank()) {
+    public ResponseEntity<?> getAllCategories(@RequestParam(required = false) String name) throws java.io.IOException {
+        if (name != null && !name.isBlank()) {
             CategoryDTO categoryDTO = categoryService.getByName(name);
             return ResponseEntity.ok(categoryDTO);
-        }else {
+        } else {
             List<CategoryDTO> result = this.categoryService.getAllCategories();
             return ResponseEntity.ok(result);
         }
@@ -46,7 +46,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}/products")
-    public ResponseEntity<AllProductsOfCategoryDTO> getAllProductsOfCategory(@PathVariable Long id) throws Exception{
+    public ResponseEntity<AllProductsOfCategoryDTO> getAllProductsOfCategory(@PathVariable Long id) {
 
         AllProductsOfCategoryDTO dto = categoryService.getAllProductsOfCategory(id);
         return ResponseEntity.ok(dto);

@@ -121,6 +121,13 @@ These endpoints interact with the external **FakeStore API**. They are intended 
 ### 2. Admin APIs (Internal Database)
 These endpoints interact with your **local H2 database**. Data created here is **fully persisted** deeply in your application.
 
+> **💡 Usage Tip:** To create a Product, you **must first create a Category** to get a valid `categoryId`.
+>
+> **Recommended Workflow:**
+> 1.  Call `POST /api/admin/categories` to create a category (e.g., "Electronics").
+> 2.  Note the `id` returned in the response (e.g., `1`).
+> 3.  Call `POST /api/admin/products` using that `id` as the `categoryId`.
+
 #### Admin Products (Database)
 *   **Create Product**
     *   `POST http://localhost:3000/api/admin/products`
@@ -135,8 +142,11 @@ These endpoints interact with your **local H2 database**. Data created here is *
         }
         ```
     *   *Requirement: `categoryId` must exist in the database.*
-*   **Get All Products**
+*   **Get All Products (With Filter)**
     *   `GET http://localhost:3000/api/admin/products`
+    *   **Query Param**: `?minPrice=100` (Optional: Filters products with price >= minPrice)
+*   **Get Most Expensive Product in Category**
+    *   `GET http://localhost:3000/api/admin/products/expensive/{categoryId}`
 *   **Get Product By ID**
     *   `GET http://localhost:3000/api/admin/products/{id}`
 *   **Delete Product**

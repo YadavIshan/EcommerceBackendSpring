@@ -22,7 +22,10 @@ public class AdminProductController {
     }
 
     @GetMapping
-    public ResponseEntity<java.util.List<ProductDTO>> getAllProducts() {
+    public ResponseEntity<java.util.List<ProductDTO>> getAllProducts(@RequestParam(required = false) Double minPrice) {
+        if (minPrice != null) {
+            return ResponseEntity.ok(adminProductService.findProductsByMinPrice(minPrice));
+        }
         return ResponseEntity.ok(adminProductService.findAllProducts());
     }
 
@@ -41,5 +44,10 @@ public class AdminProductController {
     public ResponseEntity<ProductDTO> updateProductPrice(@PathVariable Long id, @RequestBody Double price) {
         // Assuming the body is just the double value, e.g. "25.50"
         return ResponseEntity.ok(adminProductService.updateProductPriceById(id, price));
+    }
+
+    @GetMapping("/expensive/{categoryId}")
+    public ResponseEntity<ProductDTO> getMostExpensiveProduct(@PathVariable Long categoryId) {
+        return ResponseEntity.ok(adminProductService.getMostExpensiveProductByCategory(categoryId));
     }
 }

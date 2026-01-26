@@ -29,7 +29,7 @@ public class AdminCategoryController {
     }
 
     @GetMapping("/{id}/products")
-    public ResponseEntity<AllProductsOfCategoryDTO> getAllProductsOfCategory(@PathVariable Long id) throws Exception {
+    public ResponseEntity<AllProductsOfCategoryDTO> getAllProductsOfCategory(@PathVariable Long id) {
         return ResponseEntity.ok(categoryService.getAllProductsOfCategory(id));
     }
 }

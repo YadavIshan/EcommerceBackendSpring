@@ -1,5 +1,7 @@
 package com.ishan.ecommerce.services;
 
+import com.ishan.ecommerce.exception.CategoryNotFoundException;
+
 import com.ishan.ecommerce.dto.AllProductsOfCategoryDTO;
 import com.ishan.ecommerce.dto.CategoryDTO;
 import com.ishan.ecommerce.dto.ProductDTO;
@@ -46,16 +48,16 @@ public class CategoryService implements IAdminCategoryService {
     }
 
     @Override
-    public CategoryDTO getByName(String name) throws Exception {
+    public CategoryDTO getByName(String name) {
         CategoryEntity categoryEntity = categoryRepository.findByName(name)
-                .orElseThrow(() -> new Exception("Category with name " + name + " not found"));
+                .orElseThrow(() -> new CategoryNotFoundException("Category with name " + name + " not found"));
         return categoryMapper.toDTO(categoryEntity);
     }
 
     @Override
-    public AllProductsOfCategoryDTO getAllProductsOfCategory(Long categoryId) throws Exception {
+    public AllProductsOfCategoryDTO getAllProductsOfCategory(Long categoryId) {
         if (!categoryRepository.existsById(categoryId)) {
-            throw new Exception("Category with id " + categoryId + " not found");
+            throw new CategoryNotFoundException("Category with id " + categoryId + " not found");
         }
         List<ProductEntity> products = productRepository.findByCategory_Id(categoryId);
         List<ProductDTO> productDTOs = products.stream()

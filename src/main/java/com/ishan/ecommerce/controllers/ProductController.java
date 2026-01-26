@@ -27,7 +27,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FakeStoreProductResponseDTO> getProductById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<FakeStoreProductResponseDTO> getProductById(@PathVariable Long id) {
         FakeStoreProductResponseDTO product = productService.getProductById(id);
         return ResponseEntity.ok(product);
     }
