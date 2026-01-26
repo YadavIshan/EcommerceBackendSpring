@@ -38,20 +38,30 @@ public class FakeStoreCategoryService implements ICategoryService {
 
         @Override
         public CategoryDTO getByName(String name) {
-                return getAllCategories().stream()
-                                .filter(cat -> cat.getName().equalsIgnoreCase(name))
-                                .findFirst()
-                                .orElseThrow(() -> new CategoryNotFoundException("Category not found: " + name));
+                try {
+                        return getAllCategories().stream()
+                                        .filter(cat -> cat.getName().equalsIgnoreCase(name))
+                                        .findFirst()
+                                        .orElseThrow(() -> new CategoryNotFoundException(
+                                                        "Category not found: " + name));
+                } catch (IOException e) {
+                        throw new RuntimeException("Failed to fetch categories", e);
+                }
         }
 
         @Override
         public AllProductsOfCategoryDTO getAllProductsOfCategory(Long categoryId) {
                 // 1. Find category name by ID
-                CategoryDTO category = getAllCategories().stream()
-                                .filter(cat -> cat.getId().equals(categoryId))
-                                .findFirst()
-                                .orElseThrow(() -> new CategoryNotFoundException(
-                                                "Category ID not found: " + categoryId));
+                CategoryDTO category;
+                try {
+                        category = getAllCategories().stream()
+                                        .filter(cat -> cat.getId().equals(categoryId))
+                                        .findFirst()
+                                        .orElseThrow(() -> new CategoryNotFoundException(
+                                                        "Category ID not found: " + categoryId));
+                } catch (IOException e) {
+                        throw new RuntimeException("Failed to fetch categories", e);
+                }
 
                 // 2. Fetch products form Gateway
                 List<com.ishan.ecommerce.dto.FakeStoreProductDTO> fakeProducts = categoryGateway

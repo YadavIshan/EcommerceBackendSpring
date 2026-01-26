@@ -20,7 +20,13 @@ public class FakeStoreProductService implements IProductService {
 
     @Override
     public FakeStoreProductResponseDTO getProductById(Long id) {
-        ProductDTO product = this.productGateway.getProductById(id);
+        ProductDTO product;
+        try {
+            product = this.productGateway.getProductById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch product with id: " + id, e);
+        }
+
         if (product == null) {
             throw new ProductNotFoundException("Product not found with id: " + id);
         }
