@@ -51,6 +51,33 @@ When the application is running, you can access the H2 console at:
 
 > **Note:** Being an in-memory database, all data will be lost when the application is restarted.
 
+## Database Management
+
+### Flyway Migrations
+The project includes **Flyway** for robust database version control. Migration scripts are located in `src/main/resources/db/migration`:
+*   `V1__create_category_table.sql`: Category table schema.
+*   `V2__create_product_table.sql`: Product table schema with foreign key.
+*   `V3__add_rating_column_to_product.sql`: Schema update for ratings.
+*   `V4__add_description_to_category.sql`: Schema update for category descriptions.
+
+*Configuration:*
+*   **Enabled**: `false` (Default, uses Hibernate auto-generation).
+*   **Enable by setting**: `spring.flyway.enabled=true` in `application.properties`.
+
+### Hibernate DDL Strategies
+The application uses `spring.jpa.hibernate.ddl-auto` to manage schema during development:
+*   **`create-drop`** *(Current)*: Re-creates the schema on startup and drops it on shutdown.
+*   **`update`**: Updates the schema without data loss (safe for dev).
+*   **`none`**: Disables Hibernate generation (Recommended when using Flyway).
+
+## Error Handling
+
+Custom exceptions are implemented to provide meaningful HTTP status codes:
+*   **`ProductNotFoundException`**: Maps to `404 Not Found`.
+*   **`CategoryNotFoundException`**: Maps to `404 Not Found`.
+
+Service layers use these exceptions to ensure consistent API error responses.
+
 ## Build and Test
 
 This project uses Gradle for build and dependency management.
