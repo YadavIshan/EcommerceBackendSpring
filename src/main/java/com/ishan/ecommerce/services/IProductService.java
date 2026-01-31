@@ -6,7 +6,7 @@ import com.ishan.ecommerce.dto.ProductDTO;
 import java.util.List;
 
 public interface IProductService {
-    FakeStoreProductResponseDTO getProductById(Long id);
+    ProductDTO getProductById(Long id);
 
     ProductDTO createProduct(ProductDTO productDTO);
 

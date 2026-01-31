@@ -12,7 +12,7 @@ import com.ishan.ecommerce.gateway.ICategoryGateway;
 import java.io.IOException;
 import java.util.List;
 
-@Service
+@Service("fakeStoreCategoryService")
 public class FakeStoreCategoryService implements ICategoryService {
 
         private final ICategoryGateway categoryGateway;

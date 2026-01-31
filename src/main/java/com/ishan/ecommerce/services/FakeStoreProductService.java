@@ -1,6 +1,5 @@
 package com.ishan.ecommerce.services;
 
-import com.ishan.ecommerce.dto.FakeStoreProductResponseDTO;
 import com.ishan.ecommerce.dto.ProductDTO;
 import com.ishan.ecommerce.exception.ProductNotFoundException;
 
@@ -9,7 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import com.ishan.ecommerce.gateway.IProductGateway;
 
-@Service
+@Service("fakeStoreProductService")
 public class FakeStoreProductService implements IProductService {
 
     private final IProductGateway productGateway;
@@ -19,7 +18,7 @@ public class FakeStoreProductService implements IProductService {
     }
 
     @Override
-    public FakeStoreProductResponseDTO getProductById(Long id) {
+    public ProductDTO getProductById(Long id) {
         ProductDTO product;
         try {
             product = this.productGateway.getProductById(id);
@@ -31,12 +30,7 @@ public class FakeStoreProductService implements IProductService {
             throw new ProductNotFoundException("Product not found with id: " + id);
         }
 
-        // Wrap in ResponseDTO
-        return FakeStoreProductResponseDTO.builder()
-                .product(product)
-                .message("Success")
-                .status("200")
-                .build();
+        return product;
     }
 
     @Override

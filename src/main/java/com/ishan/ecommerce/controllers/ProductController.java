@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ishan.ecommerce.dto.FakeStoreProductResponseDTO;
 import com.ishan.ecommerce.dto.ProductDTO;
 import com.ishan.ecommerce.services.IProductService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,8 +26,8 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FakeStoreProductResponseDTO> getProductById(@PathVariable Long id) {
-        FakeStoreProductResponseDTO product = productService.getProductById(id);
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
+        ProductDTO product = productService.getProductById(id);
         return ResponseEntity.ok(product);
     }
 

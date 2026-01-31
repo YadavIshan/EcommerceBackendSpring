@@ -18,6 +18,8 @@ public class ProductDTO {
 	private String title;
 	private Long categoryId;
 	private String brand;
+	private String category;
+
 	private boolean popular;
 	private java.time.Instant createdAt;
 	private java.time.Instant updatedAt;

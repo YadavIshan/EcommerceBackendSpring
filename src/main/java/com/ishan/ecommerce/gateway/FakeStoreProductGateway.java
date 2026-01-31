@@ -111,9 +111,9 @@ public class FakeStoreProductGateway implements IProductGateway {
                 .title(fakeStoreProductDTO.getTitle())
                 .price(fakeStoreProductDTO.getPrice())
                 .description(fakeStoreProductDTO.getDescription())
-                .image(fakeStoreProductDTO.getImage())
                 // .categoryId() // Cannot map from String category to Long categoryId without
                 // extra logic
+                .image(fakeStoreProductDTO.getImage())
                 .build();
     }
 }

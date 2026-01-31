@@ -31,6 +31,7 @@ public class ProductMapper {
                 .price(productEntity.getPrice())
                 .description(productEntity.getDescription())
                 .categoryId(productEntity.getCategory() != null ? productEntity.getCategory().getId() : null)
+                .category(productEntity.getCategory() != null ? productEntity.getCategory().getName() : null)
                 .image(productEntity.getImage())
                 .createdAt(productEntity.getCreatedAt())
                 .updatedAt(productEntity.getUpdatedAt())
